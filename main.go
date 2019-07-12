@@ -16,8 +16,8 @@ Importa os pacotes necessários para a execução da API e validações
 */
 import (
 	"os"
-	"strings"
 	validation "github.com/lucassamuel/validation"
+	query "github.com/lucassamuel/movidesk/cmd"
 )
 
 /*
@@ -36,3 +36,4 @@ func connect() string {
 	// URL_MOVIDESK?token=TOKEN_MOVIDESK
 	return url + "?token=" + token
 }
+
