@@ -29,7 +29,7 @@ type query struct {
 // https://api.movidesk.com/public/v1/tickets?token=MEU_TOKEN&id=22155
 
 // Construtor da string query
-func constructor(fields []string, filters []string) string {
+func Constructor(fields []string, filters []string) string {
 	
 	var fieldsResult string
 	var filtersResult string
@@ -53,8 +53,12 @@ func constructor(fields []string, filters []string) string {
 	// Salva o resultado da análise dos campos e dos filtros
 	fieldsResult, filtersResult = parseQuery(query)
 
-	// Retorna a string da query
-	return fieldsResult + "&" + filtersResult
+	if fieldsResult != "" {
+		// Retorna a string da query
+		return "&" + fieldsResult + "&" + filtersResult
+	}
+
+	return "&" + filtersResult
 }
 
 // Função que analisa a query e retorna as strings dos campos e dos filtros
@@ -94,10 +98,10 @@ func fieldsConstructor(query query) string {
 
 	// Se a primeira posição do array de campos for diferente de ""
 	if query.fields[0] != "" {
+		// Inicia com o prefixo do select
+		fields += query.fieldsPrefix
 		// Construtor do select de campos
 		for i := 0; i < len(query.fields); i++ {
-			// Inicia com o prefixo do select
-			fields += query.fieldsPrefix
 			
 			// Se o índice atual for menor que o número de campos - 1
 			if i < (len(query.fields) - 1) {
@@ -123,6 +127,17 @@ func filtersConstructor(query query) string {
 	if len(query.filters) > 1 {
 		// Adiciona o prefixo dos filtros
 		filters += query.filtersPrefix
+	} else {
+		for i := 0; i < len(query.operators); i++ {
+			// Divide a string daquela posição de array em duas partes com base no operador[j]
+			split := strings.Split(query.filters[0], query.operators[i])
+
+			if len(split) == 2 {
+				if split[0] != "id" {
+					filters += query.filtersPrefix
+				}
+			}
+		}
 	}
 
 	// Se a primeira posição do vetor de campos da query for diferente de vazio,
@@ -134,8 +149,11 @@ func filtersConstructor(query query) string {
 			for j := 0; j < len(query.operators); j++ {
 				// Divide a string daquela posição de array em duas partes com base no operador[j]
 				split := strings.Split(query.filters[i], query.operators[j])
-				// Analisa o operador e retorna a string correspondente
-				filters += parseOperator(split, query.operators[j], query.operators, query.relationals)
+
+				if len(split) == 2 {
+					// Analisa o operador e retorna a string correspondente
+					filters += parseOperator(split, query.operators[j], query.operators, query.relationals)
+				}
 			}
 
 			// Se o índice atual for menor que o número de filtros - 1
@@ -144,6 +162,23 @@ func filtersConstructor(query query) string {
 				filters += " and "
 			}
 		}	
+	} else {
+		if len(query.filters) > 1 {
+			validation.Fatal("Erro ao construir os filtros: a cláusula $select é obrigatória quando $filter > 1")
+		}
+
+		for i := 0; i < len(query.operators); i++ {
+			// Divide a string daquela posição de array em duas partes com base no operador[j]
+			split := strings.Split(query.filters[0], query.operators[i])
+
+			if len(split) == 2 {
+				if split[0] != "id" {
+					validation.Fatal("Erro ao construir os filtros: apenas o id pode ser usado como $filter quando não há $select")
+				}
+
+				filters += query.filters[0]
+			}
+		}
 	}
 
 	// Retorna o resultado
@@ -171,7 +206,7 @@ func parseOperator(str []string, operator string, operators []string, relational
 	}
 
 	// Adiciona a segunda parte da string
-	result += str[1]
+	result += "'" + str[1] + "'"
 
 	// Retorna o resultado
 	return result
