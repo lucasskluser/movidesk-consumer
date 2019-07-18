@@ -99,6 +99,7 @@ func (r *Request) Run() {
 	client := http.Client{Timeout: time.Second * 5}
 	// Define a URL e o método da requisição de acordo com o que foi passado pela função New
 	request, clientErr := http.NewRequest(r.Method, r.URL, nil)
+	//log.Fatal(request)
 	// Valida se houve algum erro durante a definição da requisição
 	validation.HasError(clientErr, "Erro ao definir a requisição HTTP")
 	// Define o cabeçalho da requisição
@@ -135,13 +136,19 @@ func (r *Request) Run() {
 */
 func (r *Request) ReadResponse() Response {
 	// Instancia a estrutura de dados Ticket
-	ticket := Ticket{}
+	ticket := []Ticket{}
 	// Converte o JSON de acordo com os dados da estrutura Ticket
 	jsonErr := json.Unmarshal(r.Response.Body, &ticket)
 	// Verifica se houve algum erro durante a conversão
-	validation.HasError(jsonErr, "Erro ao ler o arquivo JSON")
+	if jsonErr != nil {
+		log.Printf("Erro ao decodificar a resposta: %v", jsonErr)
+		if e, ok := jsonErr.(*json.SyntaxError); ok {
+			log.Printf("Erro de sintaxe no byte %d", e.Offset)
+		}
+		log.Printf("Movidesk response: %q", r.Response.Body)
+	}
 	// Salva o vetor de tickets da resposta
-	r.Response.Data = []Ticket {ticket}
+	r.Response.Data = ticket
 	// Retorna a resposta completa
 	return r.Response
 }
