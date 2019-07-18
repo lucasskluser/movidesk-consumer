@@ -129,7 +129,7 @@ func filtersConstructor(query query) string {
 		filters += query.filtersPrefix
 	} else {
 		for i := 0; i < len(query.operators); i++ {
-			// Divide a string daquela posição de array em duas partes com base no operador[j]
+			// Divide a string daquela posição de array em duas partes com base no operador[i]
 			split := strings.Split(query.filters[0], query.operators[i])
 
 			if len(split) == 2 {

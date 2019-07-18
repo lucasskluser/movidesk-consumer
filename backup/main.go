@@ -21,12 +21,24 @@ import (
 	godotenv "github.com/joho/godotenv"
 )
 
+type movidesk struct {
+	url string
+	token string
+}
+
 // Start carrega as variáveis de ambiente
-func New() {
-	// Carrega o arquivo .env e, se houver um erro, salva na variável err
-	err := godotenv.Load()
-	// Se a variável err contiver um erro, retorna um erro
-	validation.HasError(err, "Erro ao carregar o .ENV")
+func (movidesk *movidesk) New(url string, token string) movidesk {
+	// // Carrega o arquivo .env e, se houver um erro, salva na variável err
+	// err := godotenv.Load()
+	// // Se a variável err contiver um erro, retorna um erro
+	// validation.HasError(err, "Erro ao carregar o .ENV")
+
+	mov := movidesk {
+		url: url,
+		token: token,
+	}
+
+	return mov
 }
 
 // Connect serve para gerar a URL de requisição GET
