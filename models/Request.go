@@ -135,13 +135,13 @@ func (r *Request) Run() {
 */
 func (r *Request) ReadResponse() Response {
 	// Instancia a estrutura de dados Ticket
-	tickets := []Ticket{}
+	ticket := Ticket{}
 	// Converte o JSON de acordo com os dados da estrutura Ticket
-	jsonErr := json.Unmarshal(r.Response.Body, &tickets)
+	jsonErr := json.Unmarshal(r.Response.Body, &ticket)
 	// Verifica se houve algum erro durante a conversão
 	validation.HasError(jsonErr, "Erro ao ler o arquivo JSON")
 	// Salva o vetor de tickets da resposta
-	r.Response.Data = tickets
+	r.Response.Data = []Ticket {ticket}
 	// Retorna a resposta completa
 	return r.Response
 }
