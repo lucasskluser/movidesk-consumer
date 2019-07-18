@@ -181,7 +181,7 @@ func (q *Query) filtersConstructor() {
 				split := strings.Split(q.Filters[i], q.operators[j])
 
 				if len(split) == 2 {
-					q.query[1] += split[0] + " " + q.relationals[j] + " '" + split[1] + "'"
+					q.query[1] += split[0] + "%20" + q.relationals[j] + "%20'" + split[1] + "'"
 				}
 			}
 
@@ -209,7 +209,7 @@ func (q *Query) filtersConstructor() {
 					q.query[1] += q.Filters[0]
 					break
 				} else {
-					q.query[1] += split[0] + " " + q.relationals[i] + " " + split[1]
+					q.query[1] += split[0] + "%20" + q.relationals[i] + "%20" + split[1]
 					break
 				}
 			}

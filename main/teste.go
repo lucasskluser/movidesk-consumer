@@ -20,8 +20,8 @@ func main() {
 		Token: token,
 	}
 
-	field := []string{""}
-	filter := []string{"id=20066"}
+	field := []string{"id", "subject"}
+	filter := []string{"id>20066"}
 
 	api.NewRequest(field, filter)
 	fmt.Println(api.GetRequestURL())
