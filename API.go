@@ -59,30 +59,23 @@ type API struct {
 	@return error -> Retorna um objeto do tipo error
 */
 func (a *API) NewRequest(fields []string, filters []string) error {
-	// Declara uma variável do tipo error vazia
-	var err error
-
 	// Chama o construtor da consulta, passando os campos e os filtros como
 	// parâmetros, e recebe como retorno um objeto do tipo erro
 	errQuery := a.Query.New(fields, filters)
 
 	// Se erro for diferente de nulo, retorna o erro
-	if errQuery != nil {
-		return errQuery
-	}
+	if errQuery != nil {return errQuery}
 
 	// Chama o construtor da requisição, passando a URL com o token, a
 	// consulta construída e o método da requisição. Recebe como retorno um
 	// objeto do tipo erro
-	errRequest := a.Request.New(a.URL+"?token="+a.Token+a.Query.GetStringQuery(), "GET")
+	errRequest := a.Request.New(a.URL + "?token=" + a.Token + a.Query.GetStringQuery(), "GET")
 
 	// Se erro for diferente de nulo, retorna o erro
-	if errRequest != nil {
-		return errRequest
-	}
+	if errRequest != nil {return errRequest}
 
 	// Se não retornou nenhum outro erro antes, retorna um objeto vazio
-	return err
+	return nil
 }
 
 /*
@@ -127,9 +120,6 @@ func (a *API) GetTicket(ticketId int) (models.Ticket, error) {
 	// Declara uma variável do tipo Ticket
 	var ticket models.Ticket
 
-	// Declara uma variável do tipo erro
-	var err error
-
 	// Percorre o vetor de tickets
 	for i := 0; i < len(a.Request.Response.Data); i++ {
 		// Se o id informado for igual ao ID do ticket da posição atual no vetor
@@ -141,10 +131,10 @@ func (a *API) GetTicket(ticketId int) (models.Ticket, error) {
 		}
 	}
 
-	if ticket.ID == 0 {
-		err = errors.New("Ticket não encontrado")
+	if ticket.Subject == "" {
+		return ticket, errors.New("Ticket não encontrado")
 	}
 
 	// Retorna os dados do ticket
-	return ticket, err
+	return ticket, nil
 }

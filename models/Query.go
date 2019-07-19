@@ -1,7 +1,7 @@
 package models
 
 import (
-	"fmt"
+	"errors"
 	"github.com/lucassamuel/validation"
 	"strings"
 )
@@ -93,13 +93,17 @@ type Query struct {
 	query 			[]string
 }
 
-func (q *Query) New(fields []string, filters []string) {
-	q.Fields = fields
+func (q *Query) New(fields []string, filters []string) error {
+	if filters == nil {return errors.New("Erro ao construir a query: filtros não podem ser nulos")}
 
-	validation.IsNull(filters, "Erro ao definir os filtros da consulta: filtros vazios")
+	q.Fields = fields
 	q.Filters = filters
 
-	q.Construct()
+	constructErr := q.Construct()
+
+	if constructErr != nil {return constructErr}
+
+	return nil
 }
 
 /*
@@ -109,7 +113,7 @@ func (q *Query) New(fields []string, filters []string) {
 	relacionais padrões. Além disso, também
 	determina o tamanho do array query[]
 */
-func (q *Query) Construct() {
+func (q *Query) Construct() error {
 	// Define o prefixo da seleção dos campos e dos filtros
 	// TODO IMPLEMENTAR EXPAND
 	q.setPrefix("$select=", "$filter=", "&$expand=owner,clients($expand=organization)")
@@ -120,6 +124,8 @@ func (q *Query) Construct() {
 	// Define os operadores relacionais
 	relationals := []string {"eq", "ne", "like", "gt", "lt"}
 
+	if len(operators) != len(relationals) {return errors.New("Erro ao construir a query: operadores diferentes dos relacionais")}
+
 	// Atribui os operadores ao objeto
 	q.setOperators(operators, relationals)
 
@@ -128,22 +134,12 @@ func (q *Query) Construct() {
 
 	// Chama o construtor da string da query
 	q.queryConstructor()
+
+	return nil
 }
 
-func (q *Query) TestQuery() {
-	fmt.Println(q.query)
-}
-
-func (q *Query) GetQuery() string {
+func (q *Query) GetStringQuery() string {
 	return q.query[2]
-}
-
-func (q *Query) GetOperators() []string {
-	return q.operators
-}
-
-func (q *Query) GetRelationals() []string {
-	return q.relationals
 }
 
 /*
@@ -165,9 +161,6 @@ func (q *Query) setOperators(operators []string, relationals[]string) {
 }
 
 func (q *Query) queryConstructor() {
-	validation.IsNull(q.Filters, "Erro ao analisar a query: filtro nulo")
-	validation.IsDiferent(q.operators, q.relationals, "Erro ao analisar a query: tamanho dos operadores diferente do tamanho dos relacionais")
-
 	q.fieldsConstructor()
 	q.filtersConstructor()
 

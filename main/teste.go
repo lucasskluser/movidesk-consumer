@@ -25,9 +25,6 @@ func main() {
 
 	fmt.Println(api.GetStringRequest())
 
-	api.Request.Run()
-	ticket := api.Request.GetAll()
-
 	errResponse := api.Request.Run()
 	trataErro(errResponse)
 
@@ -35,10 +32,8 @@ func main() {
 	trataErro(errGet)
 
 	for i := 0; i < len(ticket); i++ {
-		fmt.Printf("ID: %d, Assunto: %s, Cliente: %s, Organização: %s\n", ticket[i].ID, ticket[i].Subject, ticket[i].Client[0].BusinessName, ticket[i].Client[0].Organization.BusinessName)
+		fmt.Printf("ID: %d | Assunto: %s | %s - %s | Responsável: %s\n", ticket[i].ID, ticket[i].Subject, ticket[i].Client[0].Organization.BusinessName, ticket[i].Client[0].BusinessName, ticket[i].Owner.BusinessName)
 	}
-
-	fmt.Println(ticket)
 }
 
 func trataErro(err error) {

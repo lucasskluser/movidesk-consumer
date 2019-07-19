@@ -12,7 +12,6 @@ package models
 
 import (
 	"encoding/json"
-	"github.com/lucassamuel/validation"
 	"github.com/pkg/errors"
 	"io/ioutil"
 	"log"
@@ -73,19 +72,19 @@ type Response struct {
 	@param method string -> Indica o tipo de requisição que será utilizado
 */
 func (r *Request) New(url string, method string) error {
-	// Variável para retornar erro
-	var err error
-
 	// Se a URL é vazia, retorna um erro
-	if url == "" {err = errors.New("Erro ao criar uma requisição: a URL não pode ser vazia"); return err}
+	if url == "" {return errors.New("Erro ao criar uma requisição: a URL não pode ser vazia")}
 
 	// Se o método é vazio, retorna um erro
-	if method == "" {err = errors.New("Erro ao criar uma requisição: o método não pode ser vazio"); return err}
+	if method == "" {return errors.New("Erro ao criar uma requisição: o método não pode ser vazio")}
 
 	// Define a URL da requisição
 	r.URL = url
+
 	// Define o método da requisição
 	r.Method = method
+
+	return nil
 }
 
 /*
@@ -98,36 +97,44 @@ func (r *Request) New(url string, method string) error {
 	como erro fatal, encerrando a aplicação. O corpo da resposta à
 	requisição é salvo e convertido para um vetor de tickets.
 */
-func (r *Request) Run() {
+func (r *Request) Run() error {
 	// Define o timeout da requisição em 5 segundos
 	client := http.Client{Timeout: time.Second * 10}
 
 	// Define a URL e o método da requisição de acordo com o que foi passado pela função New
 	request, clientErr := http.NewRequest(r.Method, r.URL, nil)
-	//log.Fatal(request)
-	// Valida se houve algum erro durante a definição da requisição
-	validation.HasError(clientErr, "Erro ao definir a requisição HTTP")
+
+	// Valida erro na requisição
+	if clientErr != nil {return errors.New("Erro ao definir a requisição HTTP: " + clientErr.Error())}
+
 	// Define o cabeçalho da requisição
 	request.Header.Set("User-Agent", "movidesk-api")
+
 	// Executa a requisição
-	response, responseErr := client.Do(request)
-	// Valida se houve algum erro durante a execução da requisição
-	validation.HasError(responseErr, "Erro ao executar a requisição HTTP")
+	response, requestErr := client.Do(request)
+
+	// Valida erro na execução da requisição
+	if requestErr != nil {return errors.New("Erro ao executar a requisição HTTP: " + requestErr.Error())}
 
 	// Recebe o corpo da resposta à requisição
 	body, readErr := ioutil.ReadAll(response.Body)
-	// Valida se houve algum erro durante a leitura da resposta da requisição
-	validation.HasError(readErr, "Erro ao ler a resposta da requisição HTTP")
-	// Se o corpo da resposta for vazio
-	if body == nil {
-		// Retorna um erro
-		log.Fatal(errors.Errorf("Erro ao ler o corpo da resposta: %s"), body)
-	}
+
+	// Valida erro na resposta
+	if readErr != nil {return errors.New("Erro ao ler a resposta da requisição HTTP: " + readErr.Error())}
+
+	// Se o corpo da resposta for vazio, retorna um erro
+	if body == nil {return errors.New("Erro ao ler o corpo da resposta da requisição HTTP: " + string(body))}
 
 	// Salva o corpo da resposta
 	r.Response.Body = body
+
 	// Converte a resposta em um vetor de tickets
-	r.ReadResponse()
+	responseErr := r.ReadResponse()
+
+	// Valida erro na conversão
+	if responseErr != nil {return errors.New("Erro ao converter a resposta da requisição HTTP: " + responseErr.Error())}
+
+	return nil
 }
 
 /*
@@ -139,80 +146,33 @@ func (r *Request) Run() {
 
 	@return Response -> retorna os dados da resposta da requisição
 */
-func (r *Request) ReadResponse() Response {
+func (r *Request) ReadResponse() error {
 	// Instancia a estrutura de dados Ticket
 	tickets := []Ticket{}
 	ticket := Ticket{}
 
 	// Converte o JSON de acordo com os dados da estrutura Ticket
-	jsonErr := json.Unmarshal(r.Response.Body, &tickets)
+	var jsonErrArray error
+	var jsonErrStruct error
 
-	// Contorno temporário
-	if jsonErr != nil {
-		log.Printf("Não foi possível decodificar a resposta na estrutura []Ticket: %v\nTentando decodificar na estrutura Ticket", jsonErr)
-		jsonErr = json.Unmarshal(r.Response.Body, &ticket)
+	jsonErrArray = json.Unmarshal(r.Response.Body, &tickets)
 
-		// Verifica se houve algum erro durante a conversão
-		if jsonErr != nil {
-			log.Printf("Erro ao decodificar a resposta: %v", jsonErr)
-
-			if e, ok := jsonErr.(*json.SyntaxError); ok {
-				log.Printf("Erro de sintaxe no byte %d", e.Offset)
-			}
-
-			log.Printf("Movidesk response: %q", r.Response.Body)
-		}
-
+	if jsonErrArray != nil {
+		jsonErrStruct = json.Unmarshal(r.Response.Body, &ticket)
+	} else {
 		// Salva o vetor de tickets da resposta
-		r.Response.Data = []Ticket {ticket}
-
-		return r.Response
+		r.Response.Data = tickets
 	}
-	// Salva o vetor de tickets da resposta
-	r.Response.Data = tickets
-	
-	return r.Response
-}
 
-/*
-	GetAll retorna o vetor completo de tickets da resposta
-	à requisição.
+	if (jsonErrArray != nil) && (jsonErrStruct != nil) {
+		log.Printf("Não foi possível decodificar a resposta: %v", jsonErrStruct)
 
-	@return []Ticket -> retorna o vetor dos tickets contidos na
-						resposta da requisição
-*/
-func (r *Request) GetAll() []Ticket{
-	return r.Response.Data
-}
-
-/*
-	GetTicket retorna os dados de um determinado ticket de
-	acordo com o id do ticket informado.
-
-	Essa função percorre o vetor de tickets e verifica se
-	o parâmetro ticketId é igual ao id do ticket naquela
-	posição do vetor. Se for, retorna os dados daquele
-	ticket.
-
-	@param ticketId int -> Indica o id do ticket desejado
-	@return Ticket -> retorna os dados da estrutura Ticket
-*/
-func (r *Request) GetTicket(ticketId int) Ticket {
-	// Salva o vetor de tickets
-	tickets := r.Response.Data
-	// Define uma variável do tipo Ticket
-	var ticket Ticket
-
-	// Percorre o vetor de tickets
-	for i := 0; i < len(tickets); i++ {
-		// Se o id informado for igual ao ID do ticket da posição atual no vetor
-		if ticketId == tickets[i].ID {
-			// Salva os dados do ticket na variável
-			ticket = tickets[i]
-			// Para o loop
-			break
+		if e, ok := jsonErrStruct.(*json.SyntaxError); ok {
+			log.Printf("Erro de sintaxe no byte %d", e.Offset)
 		}
+
+		log.Printf("Resposta do Movidesk: %q", r.Response.Body)
 	}
-	// Retorna os dados do ticket
-	return ticket
+
+	return nil
 }
