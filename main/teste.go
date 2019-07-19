@@ -3,31 +3,37 @@ package main
 import (
 	"fmt"
 	"github.com/joho/godotenv"
-	"github.com/lucassamuel/movidesk/models"
-	"github.com/lucassamuel/validation"
+	"log"
 	"os"
 )
 
 func main() {
 	err := godotenv.Load(".env")
-	validation.HasError(err, "Erro ao carregar o arquivo .env")
+	trataErro(err)
 
-	url := os.Getenv("URL_MOVIDESK")
-	token := os.Getenv("TOKEN_MOVIDESK")
-
-	api := models.API{
-		URL:   url,
-		Token: token,
+	api := API {
+		URL:   os.Getenv("URL_MOVIDESK"),
+		Token: os.Getenv("TOKEN_MOVIDESK"),
 	}
 
-	field := []string{"id", "subject"}
-	filter := []string{"id>20066"}
+	field := []string{""}
+	filter := []string{""}
 
-	api.NewRequest(field, filter)
-	fmt.Println(api.GetRequestURL())
+	err = api.NewRequest(field, filter)
+	trataErro(err)
 
-	api.Request.Run()
-	ticket := api.Request.GetAll()
+	fmt.Println(api.GetStringRequest())
 
-	fmt.Println(ticket)
+	err = api.Request.Run()
+	trataErro(err)
+
+	ticket := api.GetTicket(20066)
+
+	fmt.Println(ticket.Subject)
+}
+
+func trataErro(err error) {
+	if err != nil {
+		log.Fatal(err)
+	}
 }

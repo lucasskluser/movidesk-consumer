@@ -1,7 +1,7 @@
 package models
 
 import (
-	"fmt"
+	"errors"
 	"github.com/lucassamuel/validation"
 	"strings"
 )
@@ -75,13 +75,17 @@ type Query struct {
 	query 			[]string
 }
 
-func (q *Query) New(fields []string, filters []string) {
-	q.Fields = fields
+func (q *Query) New(fields []string, filters []string) error {
+	var err error
 
-	validation.IsNull(filters, "Erro ao definir os filtros da consulta: filtros vazios")
+	if filters[0] == "" {err = errors.New("É obrigatório informar um filtro na requisição"); return err}
+
+	q.Fields = fields
 	q.Filters = filters
 
 	q.Construct()
+
+	return err
 }
 
 /*
@@ -111,11 +115,7 @@ func (q *Query) Construct() {
 	q.queryConstructor()
 }
 
-func (q *Query) TestQuery() {
-	fmt.Println(q.query)
-}
-
-func (q *Query) GetQuery() string {
+func (q *Query) GetStringQuery() string {
 	return q.query[2]
 }
 
