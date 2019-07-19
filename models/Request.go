@@ -72,13 +72,6 @@ type Response struct {
 	@param url string -> Recebe a URL que será utilizada para a requisição
 	@param method string -> Indica o tipo de requisição que será utilizado
 */
-<<<<<<< Updated upstream
-func (r *Request) New(url string, method string) {
-	// Verifica se a URL é vazia e retorna um erro
-	validation.IsEmpty(url, "Erro ao definir a URL do Request: url vazia")
-	// Verifica se o método é vazio e retorna um erro
-	validation.IsEmpty(method, "Erro ao definir o método do Request: método vazio")
-=======
 func (r *Request) New(url string, method string) error {
 	// Variável para retornar erro
 	var err error
@@ -88,7 +81,6 @@ func (r *Request) New(url string, method string) error {
 
 	// Se o método é vazio, retorna um erro
 	if method == "" {err = errors.New("Erro ao criar uma requisição: o método não pode ser vazio"); return err}
->>>>>>> Stashed changes
 
 	// Define a URL da requisição
 	r.URL = url
@@ -108,12 +100,8 @@ func (r *Request) New(url string, method string) error {
 */
 func (r *Request) Run() {
 	// Define o timeout da requisição em 5 segundos
-<<<<<<< Updated upstream
-	client := http.Client{Timeout: time.Second * 5}
-=======
 	client := http.Client{Timeout: time.Second * 10}
 
->>>>>>> Stashed changes
 	// Define a URL e o método da requisição de acordo com o que foi passado pela função New
 	request, clientErr := http.NewRequest(r.Method, r.URL, nil)
 	//log.Fatal(request)
@@ -153,18 +141,6 @@ func (r *Request) Run() {
 */
 func (r *Request) ReadResponse() Response {
 	// Instancia a estrutura de dados Ticket
-<<<<<<< Updated upstream
-	ticket := []Ticket{}
-	// Converte o JSON de acordo com os dados da estrutura Ticket
-	jsonErr := json.Unmarshal(r.Response.Body, &ticket)
-	// Verifica se houve algum erro durante a conversão
-	if jsonErr != nil {
-		log.Printf("Erro ao decodificar a resposta: %v", jsonErr)
-		if e, ok := jsonErr.(*json.SyntaxError); ok {
-			log.Printf("Erro de sintaxe no byte %d", e.Offset)
-		}
-		log.Printf("Movidesk response: %q", r.Response.Body)
-=======
 	tickets := []Ticket{}
 	ticket := Ticket{}
 
@@ -191,16 +167,10 @@ func (r *Request) ReadResponse() Response {
 		r.Response.Data = []Ticket {ticket}
 
 		return r.Response
->>>>>>> Stashed changes
 	}
 	// Salva o vetor de tickets da resposta
-<<<<<<< Updated upstream
-	r.Response.Data = ticket
-	// Retorna a resposta completa
-=======
 	r.Response.Data = tickets
-
->>>>>>> Stashed changes
+	
 	return r.Response
 }
 
