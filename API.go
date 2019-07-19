@@ -96,13 +96,11 @@ func (a *API) GetStringRequest() string {
 	@return error
 */
 func (a *API) GetAll() ([]models.Ticket, error) {
-	var err error
-
 	if len(a.Request.Response.Data) < 1 {
-		err = errors.New("Nenhum ticket encontrado")
+		return a.Request.Response.Data, errors.New("Nenhum ticket encontrado")
 	}
 
-	return a.Request.Response.Data, err
+	return a.Request.Response.Data, nil
 }
 
 /*
