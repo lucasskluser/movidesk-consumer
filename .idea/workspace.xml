@@ -3,9 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="7cc0c6f0-f610-4037-ae87-0b9396ada3e5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/API.go" beforeDir="false" afterPath="$PROJECT_DIR$/API.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main/teste.go" beforeDir="false" afterPath="$PROJECT_DIR$/main/teste.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/Query.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/Query.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/Request.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/Request.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/Ticket.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/Ticket.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -16,15 +18,23 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
+<<<<<<< Updated upstream
         <entry file="file://$PROJECT_DIR$/models/API.go">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="238">
               <caret line="14" selection-start-line="14" selection-end-line="14" />
+=======
+        <entry file="file://$PROJECT_DIR$/main/teste.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="211">
+              <caret line="34" column="154" selection-start-line="34" selection-start-column="154" selection-end-line="34" selection-end-column="154" />
+>>>>>>> Stashed changes
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+<<<<<<< Updated upstream
         <entry file="file://$PROJECT_DIR$/models/Query.go">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="426">
@@ -34,6 +44,12 @@
                 <element signature="n#!!block;n#GetOperators#0" />
                 <element signature="n#!!block;n#GetRelationals#0" />
               </folding>
+=======
+        <entry file="file://$PROJECT_DIR$/API.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="103">
+              <caret line="107" column="38" selection-start-line="107" selection-start-column="38" selection-end-line="107" selection-end-column="38" />
+>>>>>>> Stashed changes
             </state>
           </provider>
         </entry>
@@ -41,8 +57,20 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/models/Ticket.go">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
             <state relative-caret-position="443">
               <caret line="34" column="1" selection-start-line="34" selection-start-column="1" selection-end-line="34" selection-end-column="1" />
+=======
+            <state relative-caret-position="234">
+              <caret line="118" column="85" selection-start-line="118" selection-start-column="85" selection-end-line="118" selection-end-column="85" />
+              <folding>
+                <element signature="n#!!block;n#New#0" />
+                <element signature="n#!!block;n#GetOperators#0" />
+                <element signature="n#!!block;n#GetRelationals#0" />
+                <element signature="n#!!block;n#setPrefix#0" />
+                <element signature="n#!!block;n#setOperators#0" />
+              </folding>
+>>>>>>> Stashed changes
             </state>
           </provider>
         </entry>
@@ -50,20 +78,32 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main/teste.go">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
             <state relative-caret-position="307">
               <caret line="23" column="27" selection-start-line="23" selection-start-column="27" selection-end-line="23" selection-end-column="27" />
               <folding>
                 <element signature="e#14#59#0" expanded="true" />
               </folding>
+=======
+            <state relative-caret-position="239">
+              <caret line="158" column="65" lean-forward="true" selection-start-line="158" selection-start-column="65" selection-end-line="158" selection-end-column="65" />
+>>>>>>> Stashed changes
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
+<<<<<<< Updated upstream
         <entry file="file://$PROJECT_DIR$/models/Request.go">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="422">
               <caret line="150" column="33" selection-start-line="150" selection-start-column="33" selection-end-line="150" selection-end-column="33" />
+=======
+        <entry file="file://$PROJECT_DIR$/models/Ticket.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="153">
+              <caret line="18" column="23" selection-start-line="18" selection-start-column="23" selection-end-line="18" selection-end-column="23" />
+>>>>>>> Stashed changes
             </state>
           </provider>
         </entry>
@@ -86,12 +126,12 @@
       <list>
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/cmd/ticket.go" />
-        <option value="$PROJECT_DIR$/teste.go" />
         <option value="$PROJECT_DIR$/cmd/query.go" />
         <option value="$PROJECT_DIR$/main.go" />
         <option value="$PROJECT_DIR$/models/Autogenerated.go" />
         <option value="$PROJECT_DIR$/main/.env" />
         <option value="$PROJECT_DIR$/main/json" />
+<<<<<<< Updated upstream
         <option value="$PROJECT_DIR$/models/Ticket.go" />
         <option value="$PROJECT_DIR$/models/API.go" />
         <option value="$PROJECT_DIR$/.env" />
@@ -100,6 +140,19 @@
         <option value="$PROJECT_DIR$/main/teste.go" />
         <option value="$PROJECT_DIR$/models/Query.go" />
         <option value="$PROJECT_DIR$/models/Request.go" />
+=======
+        <option value="$PROJECT_DIR$/validation/Validation.go" />
+        <option value="$PROJECT_DIR$/json.json" />
+        <option value="$PROJECT_DIR$/.env" />
+        <option value="$PROJECT_DIR$/models/API.go" />
+        <option value="$PROJECT_DIR$/main/API.go" />
+        <option value="$PROJECT_DIR$/teste.go" />
+        <option value="$PROJECT_DIR$/API.go" />
+        <option value="$PROJECT_DIR$/models/Query.go" />
+        <option value="$PROJECT_DIR$/models/Request.go" />
+        <option value="$PROJECT_DIR$/models/Ticket.go" />
+        <option value="$PROJECT_DIR$/main/teste.go" />
+>>>>>>> Stashed changes
       </list>
     </option>
   </component>
@@ -186,12 +239,21 @@
     <frame x="-8" y="22" width="1936" height="1066" extended-state="6" />
     <editor active="true" />
     <layout>
+<<<<<<< Updated upstream
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13272922" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32850242" />
       <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3279743" />
+=======
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4994641" visible="true" weight="0.09701493" />
+      <window_info id="Structure" order="1" sideWeight="0.5005359" side_tool="true" weight="0.09701493" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.3279743" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4989339" visible="true" weight="0.44908896" />
+>>>>>>> Stashed changes
       <window_info anchor="bottom" id="Debug" order="3" weight="0.46623793" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -200,7 +262,11 @@
       <window_info anchor="bottom" id="Database Changes" order="8" />
       <window_info anchor="bottom" id="Version Control" order="9" />
       <window_info anchor="bottom" id="Terminal" order="10" weight="0.3290461" />
+<<<<<<< Updated upstream
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
+=======
+      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.5010661" side_tool="true" weight="0.31618434" />
+>>>>>>> Stashed changes
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -305,6 +371,7 @@
         </state>
       </provider>
     </entry>
+<<<<<<< Updated upstream
     <entry file="file://C:/Go/src/strings/strings.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="94">
@@ -319,6 +386,9 @@
         </state>
       </provider>
     </entry>
+=======
+    <entry file="file://$PROJECT_DIR$/json" />
+>>>>>>> Stashed changes
     <entry file="file://$PROJECT_DIR$/../../joho/godotenv/godotenv.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="94">
@@ -410,6 +480,7 @@
         </state>
       </provider>
     </entry>
+<<<<<<< Updated upstream
     <entry file="file://$PROJECT_DIR$/models/Query.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="426">
@@ -419,11 +490,18 @@
             <element signature="n#!!block;n#GetOperators#0" />
             <element signature="n#!!block;n#GetRelationals#0" />
           </folding>
+=======
+    <entry file="file://C:/Go/src/strings/strings.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="94">
+          <caret line="307" selection-start-line="307" selection-end-line="307" />
+>>>>>>> Stashed changes
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/models/Ticket.go">
+    <entry file="file://$PROJECT_DIR$/API.go">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
         <state relative-caret-position="443">
           <caret line="34" column="1" selection-start-line="34" selection-start-column="1" selection-end-line="34" selection-end-column="1" />
         </state>
@@ -436,13 +514,50 @@
           <folding>
             <element signature="e#14#59#0" expanded="true" />
           </folding>
+=======
+        <state relative-caret-position="103">
+          <caret line="107" column="38" selection-start-line="107" selection-start-column="38" selection-end-line="107" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models/Query.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="234">
+          <caret line="118" column="85" selection-start-line="118" selection-start-column="85" selection-end-line="118" selection-end-column="85" />
+          <folding>
+            <element signature="n#!!block;n#New#0" />
+            <element signature="n#!!block;n#GetOperators#0" />
+            <element signature="n#!!block;n#GetRelationals#0" />
+            <element signature="n#!!block;n#setPrefix#0" />
+            <element signature="n#!!block;n#setOperators#0" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/models/Request.go">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="239">
+          <caret line="158" column="65" lean-forward="true" selection-start-line="158" selection-start-column="65" selection-end-line="158" selection-end-column="65" />
+>>>>>>> Stashed changes
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models/Request.go">
+      <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
         <state relative-caret-position="422">
           <caret line="150" column="33" selection-start-line="150" selection-start-column="33" selection-end-line="150" selection-end-column="33" />
+=======
+        <state relative-caret-position="211">
+          <caret line="34" column="154" selection-start-line="34" selection-start-column="154" selection-end-line="34" selection-end-column="154" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models/Ticket.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="18" column="23" selection-start-line="18" selection-start-column="23" selection-end-line="18" selection-end-column="23" />
+>>>>>>> Stashed changes
         </state>
       </provider>
     </entry>

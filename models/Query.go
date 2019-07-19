@@ -47,6 +47,24 @@ type Query struct {
 	filtersPrefix 	string
 
 	/*
+		Filtros utilizados na cláusula de expansão
+		da consulta
+
+		@var string array
+		@example Expand = []string {"owner", "createdBy"}
+	*/
+	Expand			[]string
+
+	/*
+		Prefixo incluído na string de filtro da
+		consulta
+
+		@var string
+		@example filtersPrefix = "$filter="
+	*/
+	expandPrefix	string
+
+	/*
 		Operadores lógicos utilizados nos filtros
 		das consultas
 
@@ -93,7 +111,8 @@ func (q *Query) New(fields []string, filters []string) {
 */
 func (q *Query) Construct() {
 	// Define o prefixo da seleção dos campos e dos filtros
-	q.setPrefix("$select=", "$filter=")
+	// TODO IMPLEMENTAR EXPAND
+	q.setPrefix("$select=", "$filter=", "&$expand=owner,clients($expand=organization)")
 
 	// Define os operadores lógicos
 	operators := []string {"=", "!=", "=%", ">", "<"}
@@ -130,12 +149,14 @@ func (q *Query) GetRelationals() []string {
 /*
 	setPrefix define os prefixos da seleção dos filtros
 */
-func (q *Query) setPrefix(fieldPrefix string, filterPrefix string) {
+func (q *Query) setPrefix(fieldPrefix string, filterPrefix string, expandPrefix string) {
 	validation.IsEmpty(fieldPrefix, "Erro ao iniciar o construtor: fieldPrefix nulo")
 	q.fieldsPrefix = fieldPrefix
 
 	validation.IsEmpty(filterPrefix, "Erro ao iniciar o construtor: filterPrefix nulo")
 	q.filtersPrefix = filterPrefix
+
+	q.expandPrefix = expandPrefix
 }
 
 func (q *Query) setOperators(operators []string, relationals[]string) {
@@ -150,7 +171,7 @@ func (q *Query) queryConstructor() {
 	q.fieldsConstructor()
 	q.filtersConstructor()
 
-	q.query[2] = q.query[0] + q.query[1]
+	q.query[2] = q.query[0] + q.query[1] + q.expandPrefix
 }
 
 func (q *Query) fieldsConstructor() {
@@ -181,12 +202,12 @@ func (q *Query) filtersConstructor() {
 				split := strings.Split(q.Filters[i], q.operators[j])
 
 				if len(split) == 2 {
-					q.query[1] += split[0] + "%20" + q.relationals[j] + "%20'" + split[1] + "'"
+					q.query[1] += split[0] + "%20" + q.relationals[j] + "%20%27" + strings.ReplaceAll(split[1]," ","%20") + "%27"
 				}
 			}
 
 			if i < (len(q.Filters) - 1) {
-				q.query[1] += " and "
+				q.query[1] += "%20and%20"
 			}
 		}
 	} else {
@@ -209,7 +230,7 @@ func (q *Query) filtersConstructor() {
 					q.query[1] += q.Filters[0]
 					break
 				} else {
-					q.query[1] += split[0] + "%20" + q.relationals[i] + "%20" + split[1]
+					q.query[1] += split[0] + "%20" + q.relationals[i] + "%20" + strings.ReplaceAll(split[1]," ","%20")
 					break
 				}
 			}
