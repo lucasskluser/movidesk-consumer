@@ -11,8 +11,8 @@ package movidesk
 */
 
 import (
-	"github.com/lucassamuel/movidesk/models"
-	"github.com/pkg/errors"
+	"github.com/lukesamk/movidesk/models"
+	"errors"
 )
 
 /*
