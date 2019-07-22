@@ -12,10 +12,7 @@ func main() {
 	errEnv := godotenv.Load("./.env")
 	trataErro(errEnv)
 
-	api := movidesk.API{
-		URL:   os.Getenv("URL_MOVIDESK"),
-		Token: os.Getenv("TOKEN_MOVIDESK"),
-	}
+	api := movidesk.New(os.Getenv("TOKEN_MOVIDESK"))
 
 	field := []string{"id", "subject"}
 	filter := []string{"baseStatus=Stopped", "justification=Versão liberada"}
@@ -32,7 +29,7 @@ func main() {
 	trataErro(errGet)
 
 	for i := 0; i < len(ticket); i++ {
-		fmt.Printf("ID: %d | Assunto: %s | %s - %s | Responsável: %s\n", ticket[i].ID, ticket[i].Subject, ticket[i].Client[0].Organization.BusinessName, ticket[i].Client[0].BusinessName, ticket[i].Owner.BusinessName)
+		fmt.Printf("*%d - %s*\n_%s - %s_\nResponsável: %s\n\n", ticket[i].ID, ticket[i].Subject, ticket[i].Client[0].Organization.BusinessName, ticket[i].Client[0].BusinessName, ticket[i].Owner.BusinessName)
 	}
 }
 

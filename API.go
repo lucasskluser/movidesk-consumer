@@ -48,6 +48,17 @@ type API struct {
 	Query    models.Query
 }
 
+const URL_MOVIDESK = "https://api.movidesk.com/public/v1/tickets"
+
+func New(token string) *API {
+	api := API {
+		URL: URL_MOVIDESK,
+		Token: token,
+	}
+
+	return &api
+}
+
 /*
 	NewRequest chama os métodos construtores da query e inicia uma
 	nova requisição, passando a URL, o token, a query e o método da
