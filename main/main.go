@@ -20,14 +20,7 @@ func main() {
 
 	errResponse := api.Request.Run()
 	trataErro(errResponse)
-
-	/*ticket, errGet := api.GetAll()
-	trataErro(errGet)
-
-	for i := 0; i < len(ticket); i++ {
-		fmt.Printf("*%d - %s*\n_%s - %s_\nResponsável: %s\n\n", ticket[i].ID, ticket[i].Subject, ticket[i].Client[0].Organization.BusinessName, ticket[i].Client[0].BusinessName, ticket[i].Owner.BusinessName)
-	}*/
-
+	
 	groupBy := api.Request.Response.GroupByOrganization()
 
 	for _, organizacao := range groupBy {
