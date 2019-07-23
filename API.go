@@ -149,3 +149,41 @@ func (self *API) GetTicket(ticketId int) (models.Ticket, error) {
 	// Retorna os dados do ticket
 	return ticket, nil
 }
+
+type GroupByOrganization struct {
+	Nome    string
+	Tickets []models.Ticket
+}
+
+func (self *API) GroupByOrganization() []GroupByOrganization {
+
+	organizacoes := make([]GroupByOrganization, 0)
+
+	for _, ticket := range self.Request.Response.Data {
+		contain := false
+		for key, organizacao := range organizacoes {
+			if organizacao.Nome == ticket.Client[0].Organization.BusinessName {
+				organizacoes[key].Tickets = append(organizacoes[key].Tickets, ticket)
+				contain = true
+				break
+			}
+		}
+		if !contain {
+			_organizacao := GroupByOrganization {
+				ticket.Client[0].Organization.BusinessName,
+				append([]models.Ticket {ticket}),
+			}
+			organizacoes = append(organizacoes, _organizacao)
+		}
+	}
+
+	/*for _, organizacao := range organizacoes {
+		fmt.Printf("%s:\n", organizacao.Nome)
+		for _, ticket := range organizacao.Tickets {
+			fmt.Printf("%d - %s (%s) / %s\n", ticket.ID, ticket.Subject, ticket.Client[0].BusinessName, ticket.Owner.BusinessName)
+		}
+		fmt.Print("\n")
+	}*/
+
+	return organizacoes
+}
