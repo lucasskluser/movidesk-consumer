@@ -54,18 +54,15 @@ type Request struct {
 	@param url string -> Recebe a URL que será utilizada para a requisição
 	@param method string -> Indica o tipo de requisição que será utilizado
 */
-func (r *Request) New(url string, method string) error {
+func (self *Request) New(url string, method string) error {
 	// Se a URL é vazia, retorna um erro
 	if url == "" {return errors.New("Erro ao criar uma requisição: a URL não pode ser vazia")}
 
 	// Se o método é vazio, retorna um erro
 	if method == "" {return errors.New("Erro ao criar uma requisição: o método não pode ser vazio")}
 
-	// Define a URL da requisição
-	r.URL = url
-
-	// Define o método da requisição
-	r.Method = method
+	self.URL = url
+	self.Method = method
 
 	return nil
 }
@@ -119,4 +116,3 @@ func (r *Request) Run() error {
 
 	return nil
 }
-
