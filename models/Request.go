@@ -11,10 +11,8 @@ package models
 */
 
 import (
-	"encoding/json"
 	"errors"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"time"
 )
@@ -44,21 +42,6 @@ type Request struct {
 		estrutura de dados de uma resposta de requisição
 	*/
 	Response Response
-}
-
-/*
-	Estrutura de dados de uma resposta de requisição
-*/
-type Response struct {
-	/*
-		Corpo da resposta em bytes
-	*/
-	Body []byte
-
-	/*
-		Resposta convertida de bytes para um vetor de tickets
-	*/
-	Data []Ticket
 }
 
 /*
@@ -129,7 +112,7 @@ func (r *Request) Run() error {
 	r.Response.Body = body
 
 	// Converte a resposta em um vetor de tickets
-	responseErr := r.ReadResponse()
+	responseErr := r.Response.Read()
 
 	// Valida erro na conversão
 	if responseErr != nil {return errors.New("Erro ao converter a resposta da requisição HTTP: " + responseErr.Error())}
@@ -137,42 +120,3 @@ func (r *Request) Run() error {
 	return nil
 }
 
-/*
-	ReadResponse converte o corpo da resposta à requisição em
-	um vetor de tickets e retorna todos os dados da resposta.
-
-	Os itens dentro do JSON retornado pela API são convertidos
-	em atributos de acordo com a estrutura de dados de um Ticket
-
-	@return Response -> retorna os dados da resposta da requisição
-*/
-func (r *Request) ReadResponse() error {
-	// Instancia a estrutura de dados Ticket
-	tickets := []Ticket{}
-	ticket := Ticket{}
-
-	// Converte o JSON de acordo com os dados da estrutura Ticket
-	var jsonErrArray error
-	var jsonErrStruct error
-
-	jsonErrArray = json.Unmarshal(r.Response.Body, &tickets)
-
-	if jsonErrArray != nil {
-		jsonErrStruct = json.Unmarshal(r.Response.Body, &ticket)
-	} else {
-		// Salva o vetor de tickets da resposta
-		r.Response.Data = tickets
-	}
-
-	if (jsonErrArray != nil) && (jsonErrStruct != nil) {
-		log.Printf("Não foi possível decodificar a resposta: %v", jsonErrStruct)
-
-		if e, ok := jsonErrStruct.(*json.SyntaxError); ok {
-			log.Printf("Erro de sintaxe no byte %d", e.Offset)
-		}
-
-		log.Printf("Resposta do Movidesk: %q", r.Response.Body)
-	}
-
-	return nil
-}

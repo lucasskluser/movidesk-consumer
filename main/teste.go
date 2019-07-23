@@ -28,7 +28,7 @@ func main() {
 		fmt.Printf("*%d - %s*\n_%s - %s_\nResponsável: %s\n\n", ticket[i].ID, ticket[i].Subject, ticket[i].Client[0].Organization.BusinessName, ticket[i].Client[0].BusinessName, ticket[i].Owner.BusinessName)
 	}*/
 
-	groupBy := api.GroupByOrganization()
+	groupBy := api.Request.Response.GroupByOrganization()
 
 	for _, organizacao := range groupBy {
 		fmt.Printf("%s:\n", organizacao.Nome)
