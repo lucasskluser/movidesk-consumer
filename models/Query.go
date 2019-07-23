@@ -25,7 +25,7 @@ type Query struct {
 		@var string
 		@example fieldsPrefix = "$select="
 	*/
-	fieldsPrefix 	string
+	fieldsPrefix string
 
 	/*
 		Filtros utilizados na cláusula de condição
@@ -43,7 +43,7 @@ type Query struct {
 		@var string
 		@example filtersPrefix = "$filter="
 	*/
-	filtersPrefix 	string
+	filtersPrefix string
 
 	/*
 		Filtros utilizados na cláusula de expansão
@@ -140,6 +140,10 @@ func (self *Query) Construct() error {
 
 func (self *Query) GetStringQuery() string {
 	return self.query[2]
+}
+
+func (self *Query) GetQuery(index int) string {
+	return self.query[index]
 }
 
 /*
