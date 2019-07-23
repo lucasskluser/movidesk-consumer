@@ -92,13 +92,13 @@ type Query struct {
 	query 			[]string
 }
 
-func (q *Query) New(fields []string, filters []string) error {
+func (self *Query) New(fields []string, filters []string) error {
 	if filters == nil {return errors.New("Erro ao construir a query: filtros não podem ser nulos")}
 
-	q.Fields = fields
-	q.Filters = filters
+	self.Fields = fields
+	self.Filters = filters
 
-	constructErr := q.Construct()
+	constructErr := self.Construct()
 
 	if constructErr != nil {return constructErr}
 
@@ -112,10 +112,10 @@ func (q *Query) New(fields []string, filters []string) error {
 	relacionais padrões. Além disso, também
 	determina o tamanho do array query[]
 */
-func (q *Query) Construct() error {
+func (self *Query) Construct() error {
 	// Define o prefixo da seleção dos campos e dos filtros
 	// TODO IMPLEMENTAR EXPAND
-	errPrefix := q.setPrefix("$select=", "$filter=", "&$expand=owner,clients($expand=organization)")
+	errPrefix := self.setPrefix("$select=", "$filter=", "&$expand=owner,clients($expand=organization)")
 	if errPrefix != nil {return errPrefix}
 
 	// Define os operadores lógicos
@@ -127,105 +127,105 @@ func (q *Query) Construct() error {
 	if len(operators) != len(relationals) {return errors.New("Erro ao construir a query: operadores diferentes dos relacionais")}
 
 	// Atribui os operadores ao objeto
-	q.setOperators(operators, relationals)
+	self.setOperators(operators, relationals)
 
 	// Define o tamanho do array da query
-	q.query = []string {"fields", "filters", "queryString"}
+	self.query = []string {"fields", "filters", "queryString"}
 
 	// Chama o construtor da string da query
-	q.queryConstructor()
+	self.queryConstructor()
 
 	return nil
 }
 
-func (q *Query) GetStringQuery() string {
-	return q.query[2]
+func (self *Query) GetStringQuery() string {
+	return self.query[2]
 }
 
 /*
 	setPrefix define os prefixos da seleção dos filtros
 */
-func (q *Query) setPrefix(fieldPrefix string, filterPrefix string, expandPrefix string) error {
+func (self *Query) setPrefix(fieldPrefix string, filterPrefix string, expandPrefix string) error {
 	if fieldPrefix == "" {return errors.New("Erro ao iniciar o construtor: fieldPrefix nulo")}
-	q.fieldsPrefix = fieldPrefix
+	self.fieldsPrefix = fieldPrefix
 
 	if filterPrefix == "" {return errors.New("Erro ao iniciar o construtor: filterPrefix nulo")}
-	q.filtersPrefix = filterPrefix
+	self.filtersPrefix = filterPrefix
 
-	q.expandPrefix = expandPrefix
+	self.expandPrefix = expandPrefix
 
 	return nil
 }
 
-func (q *Query) setOperators(operators []string, relationals[]string) {
-	q.operators = operators
-	q.relationals = relationals
+func (self *Query) setOperators(operators []string, relationals[]string) {
+	self.operators = operators
+	self.relationals = relationals
 }
 
-func (q *Query) queryConstructor() {
-	q.fieldsConstructor()
-	q.filtersConstructor()
+func (self *Query) queryConstructor() {
+	self.fieldsConstructor()
+	self.filtersConstructor()
 
-	q.query[2] = q.query[0] + q.query[1] + q.expandPrefix
+	self.query[2] = self.query[0] + self.query[1] + self.expandPrefix
 }
 
-func (q *Query) fieldsConstructor() {
-	if q.Fields[0] != "" {
-		q.query[0] = "&" + q.fieldsPrefix
+func (self *Query) fieldsConstructor() {
+	if self.Fields[0] != "" {
+		self.query[0] = "&" + self.fieldsPrefix
 
-		for i := 0; i < len(q.Fields); i++ {
-			if i < (len(q.Fields) - 1) {
-				q.query[0] += q.Fields[i] + ","
+		for i := 0; i < len(self.Fields); i++ {
+			if i < (len(self.Fields) - 1) {
+				self.query[0] += self.Fields[i] + ","
 			} else {
-				q.query[0] += q.Fields[i]
+				self.query[0] += self.Fields[i]
 			}
 		}
 	} else {
-		q.query[0] = ""
+		self.query[0] = ""
 	}
 }
 
-func (q *Query) filtersConstructor() {
+func (self *Query) filtersConstructor() {
 
-	q.query[1] = "&"
+	self.query[1] = "&"
 
-	if len(q.Filters) > 1 {
-		q.query[1] += q.filtersPrefix
+	if len(self.Filters) > 1 {
+		self.query[1] += self.filtersPrefix
 
-		for i := 0; i < len(q.Filters); i++ {
-			for j := 0; j < len(q.operators); j++ {
-				split := strings.Split(q.Filters[i], q.operators[j])
+		for i := 0; i < len(self.Filters); i++ {
+			for j := 0; j < len(self.operators); j++ {
+				split := strings.Split(self.Filters[i], self.operators[j])
 
 				if len(split) == 2 {
-					q.query[1] += split[0] + "%20" + q.relationals[j] + "%20%27" + strings.ReplaceAll(split[1]," ","%20") + "%27"
+					self.query[1] += split[0] + "%20" + self.relationals[j] + "%20%27" + strings.ReplaceAll(split[1]," ","%20") + "%27"
 				}
 			}
 
-			if i < (len(q.Filters) - 1) {
-				q.query[1] += "%20and%20"
+			if i < (len(self.Filters) - 1) {
+				self.query[1] += "%20and%20"
 			}
 		}
 	} else {
-		for i := 0; i < len(q.operators); i++ {
-			split := strings.Split(q.Filters[0], q.operators[i])
+		for i := 0; i < len(self.operators); i++ {
+			split := strings.Split(self.Filters[0], self.operators[i])
 
 			if len(split) == 2 {
-				if split[0] != "id" || q.operators[i] != "=" {
-					q.query[1] += q.filtersPrefix
+				if split[0] != "id" || self.operators[i] != "=" {
+					self.query[1] += self.filtersPrefix
 					break
 				}
 			}
 		}
 
-		for i := 0; i < len(q.operators); i++ {
-			split := strings.Split(q.Filters[0], q.operators[i])
+		for i := 0; i < len(self.operators); i++ {
+			split := strings.Split(self.Filters[0], self.operators[i])
 
 			if len(split) == 2 {
-				if split[0] == "id" && q.operators[i] == "=" {
-					q.query[1] += q.Filters[0]
+				if split[0] == "id" && self.operators[i] == "=" {
+					self.query[1] += self.Filters[0]
 					break
 				} else {
-					q.query[1] += split[0] + "%20" + q.relationals[i] + "%20" + strings.ReplaceAll(split[1]," ","%20")
+					self.query[1] += split[0] + "%20" + self.relationals[i] + "%20" + strings.ReplaceAll(split[1]," ","%20")
 					break
 				}
 			}
