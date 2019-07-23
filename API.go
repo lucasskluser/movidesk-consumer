@@ -51,7 +51,14 @@ type API struct {
 // Constante que indica a URL de requisição da API do Movidesk
 const URL_MOVIDESK = "https://api.movidesk.com/public/v1/tickets"
 
-// Construtor do tipo API
+/*
+	Construtor do tipo API
+
+	Essa função aloca dados do tipo API e retorna a estrutura
+
+	@param token string -> Recebe o token de requisição do Movidesk
+	@return *API -> Retorna a própria estrutura do tipo API
+ */
 func New(token string) *API {
 	api := API {
 		URL: URL_MOVIDESK,
