@@ -21,6 +21,46 @@ type Response struct {
 }
 
 /*
+	Read converte o corpo da resposta à requisição em
+	um vetor de tickets e retorna todos os dados da resposta.
+
+	Os itens dentro do JSON retornado pela API são convertidos
+	em atributos de acordo com a estrutura de dados de um Ticket
+
+	@return Response -> retorna os dados da resposta da requisição
+*/
+func (self *Response) Read() error {
+	// Instancia a estrutura de dados Ticket
+	tickets := []Ticket{}
+	ticket := Ticket{}
+
+	var jsonErrArray error
+	var jsonErrStruct error
+
+	// Converte o JSON de acordo com os dados da estrutura Ticket
+	jsonErrArray = json.Unmarshal(self.Body, &tickets)
+
+	if jsonErrArray != nil {
+		jsonErrStruct = json.Unmarshal(self.Body, &ticket)
+	} else {
+		// Salva o vetor de tickets da resposta
+		self.Data = tickets
+	}
+
+	if (jsonErrArray != nil) && (jsonErrStruct != nil) {
+		log.Printf("Não foi possível decodificar a resposta: %v", jsonErrStruct)
+
+		if e, ok := jsonErrStruct.(*json.SyntaxError); ok {
+			log.Printf("Erro de sintaxe no byte %d", e.Offset)
+		}
+
+		log.Printf("Resposta do Movidesk: %q", self.Body)
+	}
+
+	return nil
+}
+
+/*
 	Estrutura de dados do agrupamento por organização
 */
 type GroupByOrganization struct {
@@ -76,44 +116,4 @@ func (self *Response) GroupByOrganization() []GroupByOrganization {
 
 	// Retorna o vetor
 	return organizacoes
-}
-
-/*
-	Read converte o corpo da resposta à requisição em
-	um vetor de tickets e retorna todos os dados da resposta.
-
-	Os itens dentro do JSON retornado pela API são convertidos
-	em atributos de acordo com a estrutura de dados de um Ticket
-
-	@return Response -> retorna os dados da resposta da requisição
-*/
-func (self *Response) Read() error {
-	// Instancia a estrutura de dados Ticket
-	tickets := []Ticket{}
-	ticket := Ticket{}
-
-	var jsonErrArray error
-	var jsonErrStruct error
-
-	// Converte o JSON de acordo com os dados da estrutura Ticket
-	jsonErrArray = json.Unmarshal(self.Body, &tickets)
-
-	if jsonErrArray != nil {
-		jsonErrStruct = json.Unmarshal(self.Body, &ticket)
-	} else {
-		// Salva o vetor de tickets da resposta
-		self.Data = tickets
-	}
-
-	if (jsonErrArray != nil) && (jsonErrStruct != nil) {
-		log.Printf("Não foi possível decodificar a resposta: %v", jsonErrStruct)
-
-		if e, ok := jsonErrStruct.(*json.SyntaxError); ok {
-			log.Printf("Erro de sintaxe no byte %d", e.Offset)
-		}
-
-		log.Printf("Resposta do Movidesk: %q", self.Body)
-	}
-
-	return nil
 }
