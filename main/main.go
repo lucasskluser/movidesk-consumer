@@ -20,14 +20,21 @@ func main() {
 
 	errResponse := api.Request.Run()
 	trataErro(errResponse)
-	
+
 	groupBy := api.Request.Response.GroupByOrganization()
 
 	for _, organizacao := range groupBy {
 		fmt.Printf("%s:\n", organizacao.Nome)
 		for _, ticket := range organizacao.Tickets {
 			createdDate := strings.Split(ticket.CreatedDate, "T")
-			fmt.Printf("%d [%s] - %s (%s) / %s\n", ticket.ID, createdDate[0], ticket.Subject, ticket.Client[0].BusinessName, ticket.Owner.BusinessName)
+			fmt.Printf(
+				"%d [%s] - %s (%s) / %s\n",
+				ticket.ID,
+				createdDate[0],
+				ticket.Subject,
+				ticket.Client[0].BusinessName,
+				ticket.Owner.BusinessName,
+			)
 		}
 		fmt.Print("\n")
 	}
