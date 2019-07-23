@@ -11,8 +11,8 @@ package movidesk
 */
 
 import (
-	"github.com/lukesamk/movidesk/models"
 	"errors"
+	"github.com/lukesamk/movidesk/models"
 )
 
 /*
@@ -48,8 +48,10 @@ type API struct {
 	Query    models.Query
 }
 
+// Constante que indica a URL de requisição da API do Movidesk
 const URL_MOVIDESK = "https://api.movidesk.com/public/v1/tickets"
 
+// Construtor do tipo API
 func New(token string) *API {
 	api := API {
 		URL: URL_MOVIDESK,
@@ -69,10 +71,10 @@ func New(token string) *API {
 
 	@return error -> Retorna um objeto do tipo error
 */
-func (a *API) NewRequest(fields []string, filters []string) error {
+func (self *API) NewRequest(fields []string, filters []string) error {
 	// Chama o construtor da consulta, passando os campos e os filtros como
 	// parâmetros, e recebe como retorno um objeto do tipo erro
-	errQuery := a.Query.New(fields, filters)
+	errQuery := self.Query.New(fields, filters)
 
 	// Se erro for diferente de nulo, retorna o erro
 	if errQuery != nil {return errQuery}
@@ -80,7 +82,7 @@ func (a *API) NewRequest(fields []string, filters []string) error {
 	// Chama o construtor da requisição, passando a URL com o token, a
 	// consulta construída e o método da requisição. Recebe como retorno um
 	// objeto do tipo erro
-	errRequest := a.Request.New(a.URL + "?token=" + a.Token + a.Query.GetStringQuery(), "GET")
+	errRequest := self.Request.New(self.URL + "?token=" + self.Token + self.Query.GetStringQuery(), "GET")
 
 	// Se erro for diferente de nulo, retorna o erro
 	if errRequest != nil {return errRequest}
@@ -95,8 +97,8 @@ func (a *API) NewRequest(fields []string, filters []string) error {
 
 	@return string -> retorna a string da URL completa da requisição
 */
-func (a *API) GetStringRequest() string {
-	return string(a.Request.URL)
+func (self *API) GetStringRequest() string {
+	return string(self.Request.URL)
 }
 
 /*
@@ -106,12 +108,12 @@ func (a *API) GetStringRequest() string {
 							resposta da requisição
 	@return error
 */
-func (a *API) GetAll() ([]models.Ticket, error) {
-	if len(a.Request.Response.Data) < 1 {
-		return a.Request.Response.Data, errors.New("Nenhum ticket encontrado")
+func (self *API) GetAll() ([]models.Ticket, error) {
+	if len(self.Request.Response.Data) < 1 {
+		return self.Request.Response.Data, errors.New("Nenhum ticket encontrado")
 	}
 
-	return a.Request.Response.Data, nil
+	return self.Request.Response.Data, nil
 }
 
 /*
@@ -125,16 +127,16 @@ func (a *API) GetAll() ([]models.Ticket, error) {
 	@param ticketId int -> Indica o id do ticket desejado
 	@return Ticket -> retorna os dados da estrutura Ticket
 */
-func (a *API) GetTicket(ticketId int) (models.Ticket, error) {
+func (self *API) GetTicket(ticketId int) (models.Ticket, error) {
 	// Declara uma variável do tipo Ticket
 	var ticket models.Ticket
 
 	// Percorre o vetor de tickets
-	for i := 0; i < len(a.Request.Response.Data); i++ {
+	for i := 0; i < len(self.Request.Response.Data); i++ {
 		// Se o id informado for igual ao ID do ticket da posição atual no vetor
-		if ticketId == a.Request.Response.Data[i].ID {
+		if ticketId == self.Request.Response.Data[i].ID {
 			// Salva os dados do ticket na variável
-			ticket = a.Request.Response.Data[i]
+			ticket = self.Request.Response.Data[i]
 			// Para o loop
 			break
 		}
