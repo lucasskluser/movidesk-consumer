@@ -2,7 +2,6 @@ package models
 
 import (
 	"errors"
-	"github.com/lucassamuel/validation"
 	"strings"
 )
 
@@ -116,7 +115,8 @@ func (q *Query) New(fields []string, filters []string) error {
 func (q *Query) Construct() error {
 	// Define o prefixo da seleção dos campos e dos filtros
 	// TODO IMPLEMENTAR EXPAND
-	q.setPrefix("$select=", "$filter=", "&$expand=owner,clients($expand=organization)")
+	errPrefix := q.setPrefix("$select=", "$filter=", "&$expand=owner,clients($expand=organization)")
+	if errPrefix != nil {return errPrefix}
 
 	// Define os operadores lógicos
 	operators := []string {"=", "!=", "=%", ">", "<"}
@@ -145,14 +145,16 @@ func (q *Query) GetStringQuery() string {
 /*
 	setPrefix define os prefixos da seleção dos filtros
 */
-func (q *Query) setPrefix(fieldPrefix string, filterPrefix string, expandPrefix string) {
-	validation.IsEmpty(fieldPrefix, "Erro ao iniciar o construtor: fieldPrefix nulo")
+func (q *Query) setPrefix(fieldPrefix string, filterPrefix string, expandPrefix string) error {
+	if fieldPrefix == "" {return errors.New("Erro ao iniciar o construtor: fieldPrefix nulo")}
 	q.fieldsPrefix = fieldPrefix
 
-	validation.IsEmpty(filterPrefix, "Erro ao iniciar o construtor: filterPrefix nulo")
+	if filterPrefix == "" {return errors.New("Erro ao iniciar o construtor: filterPrefix nulo")}
 	q.filtersPrefix = filterPrefix
 
 	q.expandPrefix = expandPrefix
+
+	return nil
 }
 
 func (q *Query) setOperators(operators []string, relationals[]string) {
