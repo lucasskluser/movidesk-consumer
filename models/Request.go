@@ -42,7 +42,7 @@ type Request struct {
 		estrutura de dados de uma resposta de requisição
 	*/
 	Response Response
-}
+ }
 
 /*
 	New inicia uma nova requisição à API

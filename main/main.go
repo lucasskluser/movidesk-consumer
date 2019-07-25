@@ -28,15 +28,13 @@ func main() {
 		for _, ticket := range organizacao.Tickets {
 			createdDate := strings.Split(ticket.CreatedDate, "T")
 			fmt.Printf(
-				"%d [%s] - %s (%s) / %s\n",
+				"%d - %s\n%s | %s\n\n",
 				ticket.ID,
-				createdDate[0],
 				ticket.Subject,
+				createdDate[0],
 				ticket.Client[0].BusinessName,
-				ticket.Owner.BusinessName,
 			)
 		}
-		fmt.Print("\n")
 	}
 }
 
