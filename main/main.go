@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	api := movidesk.New("ec673f86-3d7a-4045-afc0-4b453e148678")
+	api := movidesk.New("API_TOKEN")
 
 	field := []string{"id", "subject", "createdDate"}
 	filter := []string{"baseStatus=Stopped", "justification=Versão liberada"}
