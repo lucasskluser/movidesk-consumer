@@ -1,2 +1,2 @@
 # Movidesk API
-Este pacote possui as funções para conexão, requisição, leitura e publicação de chamados através da API do Movidesk.
+Serviço de consumo da API do Movidesk básico (e não concluído por falta de tempo) em Golang.
